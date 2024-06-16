@@ -1,0 +1,12 @@
+[Unit]
+Description=Mount /dev/sda to /home/Sid_Lais/ssd
+Requires=local-fs.target
+After=local-fs.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/mount /dev/sda /home/Sid_Lais/ssd -o rw,uid=1000,gid=1000
+RemainAfterExit=true
+
+[Install]
+WantedBy=sysinit.target

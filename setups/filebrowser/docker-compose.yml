@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  filebrowser:
+    image: "filebrowser/filebrowser:latest"
+    container_name: "filebrowser"
+    user: 1000:1000
+    ports:
+      - 9600:80
+    volumes:
+      -  /home/Sid_Lais/:/srv
+      -  /home/Sid_Lais/services/filebrowser/filebrowser.db:/database.db
+    restart: unless-stopped
