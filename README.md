@@ -61,6 +61,7 @@ Refrence - https://docs.docker.com/engine/install/debian/
 
 # Configure `mount-ssd.service` before proceeding
 
+https://www.zdnet.com/article/how-to-permanently-mount-a-drive-in-linux-and-why-you-should/
 
 # Static IP Config
 
