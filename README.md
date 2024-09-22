@@ -3,6 +3,12 @@
 - Make sure to install `Raspberry Pi OS Lite 64-bit`
 - Username - `Sid_Lais`
 
+# Install necessary tools
+
+```zsh
+sudo apt install -y neovim networkd-dispatcher
+```
+
 # Setup ssh keys
 - Go to ~/.shh folder on your pc and copy the public ssh key you want to use
 - Ssh to raspberrypi using password, then run the following commands
@@ -11,7 +17,7 @@
 mkdir .ssh
 cd .ssh
 touch authorized_keys
-nano authorized_keys
+vim authorized_keys
 ```
 
 # First Update
@@ -24,7 +30,7 @@ sudo apt update && sudo apt upgrade
 Run the following command to uninstall all conflicting packages:
 
 ```zsh
-for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt remove $pkg; done
 ```
 
 ## Installing Docker through apt
@@ -32,8 +38,8 @@ for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker c
 1. Set up Docker's apt repository.
 ```zsh
 # Add Docker's official GPG key:
-sudo apt-get update
-sudo apt-get install ca-certificates curl
+sudo apt update
+sudo apt install ca-certificates curl
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -43,12 +49,12 @@ echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
+sudo apt update
 ```
 
 2. Install the Docker packages.
 ```zsh
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
 3. Added User to Docker Group -
@@ -130,12 +136,13 @@ echo 'net.ipv6.conf.all.forwarding = 1' | sudo tee -a /etc/sysctl.d/99-tailscale
 sudo sysctl -p /etc/sysctl.d/99-tailscale.conf
 ```
 
-2. Now, Enable subnet routes from the admin console
-3. Now run the following command on the pi -
+2. Now run the following command on the pi -
 
 ```zsh
 sudo tailscale up --advertise-routes=192.168.0.0/24,192.168.1.0/24 --advertise-exit-node
 ```
+
+3. Now, Enable subnet routes from the admin console.
 
 ## Subnets Optimisation for Ethernet
 
@@ -176,8 +183,8 @@ sudo curl -L -o /etc/apt/keyrings/syncthing-archive-keyring.gpg https://syncthin
 echo "deb [signed-by=/etc/apt/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
 
 # Update and install syncthing:
-sudo apt-get update
-sudo apt-get install syncthing
+sudo apt update
+sudo apt install syncthing
 
 ```
 
@@ -188,4 +195,22 @@ Refrence - https://apt.syncthing.net/
 ```zsh
 sudo systemctl enable syncthing@Sid_Lais.service
 sudo systemctl start syncthing@Sid_Lais.service
+```
+
+# Make Syncthing Accessible from Anywhere
+
+```zsh
+vim /.local/state/syncthing/config.xml
+```
+
+Change
+
+```xml
+<address>127.0.0.1:8384</address>
+```
+
+to
+
+```xml
+<address>0.0.0.0:8384</address>
 ```
